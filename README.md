@@ -4,10 +4,7 @@
 
 ## Table of content
 
-- [Welcome to longhorn](#welcome-to-longhorn)
-  - [Table of content](#table-of-content)
-  - [CronJobs](#cronjobs)
-  - [Installation process](#installation-process)
+[[_TOC_]]
 
 ## CronJobs
 
