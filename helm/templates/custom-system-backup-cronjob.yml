@@ -1,0 +1,68 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: longhorn-system-backup
+  namespace: longhorn-system
+spec:
+  schedule: {{ .Values.longhornContext.cron_job.schedules.system_backup }}
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          imagePullSecrets:
+            - name: gitlab-registry-key
+          containers:
+            - name: backup
+              image: gitlab-registry-internal.spirit-dev.net/infrastructure/docker/alpine:latest
+              imagePullPolicy: IfNotPresent
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  #!/bin/sh
+                  set -e  -x
+
+                  function execute_backup {
+                      apk add --no-cache jq
+
+                      # number of backups to keep, including the current one
+                      KEEP="3"
+
+                      # URL for lonhorn service (controller)
+                      LONGHORN_URL="http://longhorn-frontend.longhorn-system.svc.cluster.local"
+
+                      BACKUP_NAME="system-backup-$(date --utc +%Y%m%d%H%M%S)"
+
+                      # create task
+                      curl -f -X POST -H 'Content-Type: application/json' --data-binary @- "${LONGHORN_URL}/v1/systembackups" <<EOF
+                      {
+                          "name":"${BACKUP_NAME}",
+                          "volumeBackupPolicy":"disabled"
+                      }
+                  EOF
+
+                      # wait for task completion
+                      while true; do
+                          sleep 3
+                          STATUS=$(curl -f "${LONGHORN_URL}/v1/systembackups" | jq -r ".data[] | select(.id == \"${BACKUP_NAME}\").state")
+                          if [ "1$STATUS" = "1Completed" ] || [ "1$STATUS" = "1Ready" ]; then
+                          break
+                          fi
+                      done
+
+                      # cleanup the old backups - expected sorted output, from oldest to newest
+                      for BACKUPID in $(curl -f "${LONGHORN_URL}/v1/systembackups" | jq -r '.data[].id' | head -n -"$SKIP"); do
+                          echo "Removing old backup ${BACKUPID}"
+                          curl -f -X DELETE "${LONGHORN_URL}/v1/systembackups/${BACKUPID}"
+                      done
+                  }
+
+                  if ping -c 1 192.168.0.52 &>/dev/null; then
+                      execute_backup;
+                  else
+                      echo "NAS not recheable. Skipping this session";
+                  fi
+          restartPolicy: Never
