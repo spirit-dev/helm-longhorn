@@ -9,9 +9,9 @@ metadata:
   annotations:
     longhorn.io/last-applied-cronjob-spec: >-
       {"schedule":"0 20 * *
-      *","concurrencyPolicy":"Forbid","jobTemplate":{"metadata":{"creationTimestamp":null},"spec":{"backoffLimit":3,"template":{"metadata":{"name":"custom-backup-job","creationTimestamp":null,"labels":{"longhorn.io/managed-by":"longhorn-manager","recurring-job.longhorn.io":"custom-backup-job"}},"spec":{"volumes":[{"name":"engine-binaries","hostPath":{"path":"/var/lib/longhorn/engine-binaries/"}}],"containers":[{"name":"custom-backup-job","image":"longhornio/longhorn-manager:v1.5.1","command":["longhorn-manager","-d","recurring-job","custom-backup-job","--manager-url","http://longhorn-backend:9500/v1"],"env":[{"name":"POD_NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}}],"resources":{},"volumeMounts":[{"name":"engine-binaries","mountPath":"/var/lib/longhorn/engine-binaries/"}]}],"restartPolicy":"OnFailure","serviceAccountName":"longhorn-service-account"}}}},"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1}
+      *","concurrencyPolicy":"Forbid","jobTemplate":{"metadata":{"creationTimestamp":null},"spec":{"backoffLimit":3,"template":{"metadata":{"name":"custom-backup-job","creationTimestamp":null,"labels":{"longhorn.io/managed-by":"longhorn-manager","recurring-job.longhorn.io":"custom-backup-job"}},"spec":{"volumes":[{"name":"engine-binaries","hostPath":{"path":"/var/lib/longhorn/engine-binaries/"}}],"containers":[{"name":"custom-backup-job","image":"longhornio/longhorn-manager:v1.7.3","command":["longhorn-manager","-d","recurring-job","custom-backup-job","--manager-url","http://longhorn-backend:9500/v1"],"env":[{"name":"POD_NAMESPACE","valueFrom":{"fieldRef":{"fieldPath":"metadata.namespace"}}}],"resources":{},"volumeMounts":[{"name":"engine-binaries","mountPath":"/var/lib/longhorn/engine-binaries/"}]}],"restartPolicy":"OnFailure","serviceAccountName":"longhorn-service-account","priorityClassName":"longhorn-critical"}}}},"successfulJobsHistoryLimit":1,"failedJobsHistoryLimit":1}
 spec:
-  schedule: {{ .Values.longhornContext.cron_job.schedules.backup_job }}
+  schedule: { { .Values.longhornContext.cron_job.schedules.backup_job } }
   concurrencyPolicy: Forbid
   suspend: false
   jobTemplate:
@@ -34,7 +34,7 @@ spec:
                 type: ""
           containers:
             - name: custom-backup-job
-              image: longhornio/longhorn-manager:v1.5.1
+              image: longhornio/longhorn-manager:v1.7.3
               command: ["/bin/sh", "-c"]
               args:
                 - if ping -c 1 192.168.0.52 &>/dev/null; then
