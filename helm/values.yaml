@@ -1,3 +1,9 @@
+longhornContext:
+  cron_job:
+    schedules:
+      backup_job: 0 0 * * *
+      system_backup: 40 0 * * *
+
 longhorn:
   # Default values for longhorn.
   # This is a YAML-formatted file.
@@ -447,7 +453,7 @@ longhorn:
     secureBackends: false
 
     # -- TLS secret that contains the private key and certificate to be used for TLS. This setting applies only when TLS is enabled on ingress records.
-    tlsSecret: longhorn.local-tls
+    tlsSecret: longhorn.local-tls # pragma: allowlist secret
 
     # -- Default ingress path. You can access the Longhorn UI by following the full ingress path {{host}}+{{path}}.
     path: /
