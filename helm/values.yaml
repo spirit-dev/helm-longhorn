@@ -1,4 +1,11 @@
 longhornContext:
+  cifs_credentials:
+    password: ""
+    username: ""
+  registry:
+    url:
+    username:
+    password:
   cron_job:
     schedules:
       backup_job: 0 0 * * *
