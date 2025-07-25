@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: gitlab-registry-key
+  namespace: longhorn-system
+data:
+  {{- with .Values.longhornContext.registry }}
+  .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\"}}}" .url .username .password | b64enc }}
+  {{- end }}
+
+type: kubernetes.io/dockerconfigjson
