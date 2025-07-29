@@ -7,5 +7,4 @@ data:
   {{- with .Values.longhornContext.registry }}
   .dockerconfigjson: {{ printf "{\"auths\":{\"%s\":{\"username\":\"%s\",\"password\":\"%s\"}}}" .url .username .password | b64enc }}
   {{- end }}
-
 type: kubernetes.io/dockerconfigjson
