@@ -9,57 +9,33 @@
   "minor": {
     "automerge": false
   },
+  "packageRules": [
+    {
+      "description": "Group all Longhorn updates together",
+      "groupName": "longhorn-updates",
+      "matchPackagePatterns": [
+        "longhorn",
+        "longhornio/.*"
+      ]
+    }
+  ],
   "patch": {
     "automerge": false
   },
   "pin": {
     "automerge": false
   },
-  "packageRules": [
-    {
-      "description": "Group all Longhorn updates together",
-      "matchPackagePatterns": ["longhorn", "longhornio/.*"],
-      "groupName": "longhorn-updates"
-    }
-  ],
   "regexManagers": [
     {
-      "description": "Update Longhorn core component Docker images to match chart version",
-      "fileMatch": ["^helm/values\\.turingpi\\.yaml$"],
-      "matchStrings": [
-        "(\\s+)repository:\\s+(?<depName>longhornio/longhorn-engine)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/longhorn-manager)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/longhorn-ui)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/longhorn-instance-manager)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/longhorn-share-manager)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/backing-image-manager)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)"
-      ],
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "longhorn/longhorn",
-      "extractVersionTemplate": "^v(?<version>.+)$"
-    },
-    {
-      "description": "Update Longhorn CSI component Docker images",
-      "fileMatch": ["^helm/values\\.turingpi\\.yaml$"],
-      "matchStrings": [
-        "(\\s+)repository:\\s+(?<depName>longhornio/csi-attacher)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/csi-provisioner)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/csi-node-driver-registrar)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/csi-resizer)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/csi-snapshotter)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)",
-        "(\\s+)repository:\\s+(?<depName>longhornio/livenessprobe)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)"
-      ],
       "datasourceTemplate": "docker",
-      "extractVersionTemplate": "^v(?<version>.+)$"
-    },
-    {
-      "description": "Update support bundle kit Docker image",
-      "fileMatch": ["^helm/values\\.turingpi\\.yaml$"],
-      "matchStrings": [
-        "(\\s+)repository:\\s+(?<depName>longhornio/support-bundle-kit)\\s+tag:\\s+(?<currentVersion>v[0-9]+\\.[0-9]+\\.[0-9]+)"
+      "description": "Update Longhorn Docker images in values.turingpi.yaml",
+      "fileMatch": [
+        "^helm/values\\.turingpi\\.yaml$"
       ],
-      "datasourceTemplate": "docker",
-      "extractVersionTemplate": "^v(?<version>.+)$"
+      "matchStrings": [
+        "repository:\\s*(?<depName>longhornio\\/[^\\s]+)\\s+tag:\\s*(?<currentValue>[^\\s]+)"
+      ],
+      "versioningTemplate": "docker"
     }
   ]
 }
