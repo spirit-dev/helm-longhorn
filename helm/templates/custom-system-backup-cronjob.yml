@@ -14,6 +14,7 @@ spec:
         spec:
           imagePullSecrets:
             - name: gitlab-registry-key
+          priorityClassName: {{ .Values.longhornContext.cron_job.priorityClassName }}
           containers:
             - name: backup
               image: gitlab-registry-internal.spirit-dev.net/infrastructure/docker/alpine:latest

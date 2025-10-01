@@ -29,6 +29,7 @@ spec:
               hostPath:
                 path: /var/lib/longhorn/engine-binaries/
                 type: ""
+          priorityClassName: {{ .Values.longhornContext.cron_job.priorityClassName }}
           containers:
             - name: custom-backup-job
               image: longhornio/longhorn-manager:v1.8.2
