@@ -1,12 +1,6 @@
 # longhorn
 
-<!-- More info: https://github.com/Ileriayo/markdown-badges -->
-<!-- More info: https://shields.io/badges -->
-<!-- More info: https://badgesgenerator.com/ -->
 
-[![GitLab Sync](https://img.shields.io/badge/gitlab_sync-longhorn-blue?style=for-the-badge&logo=gitlab)](https://gitlab-internal.spirit-dev.net/github-mirror/helm-longhorn) <!-- markdownlint-disable MD041 -->
-[![GitHub Mirror](https://img.shields.io/badge/github_mirror-longhorn-blue?style=for-the-badge&logo=github)](https://github.com/spirit-dev/helm-longhorn)
-[![App Status](https://argocd-internal.spirit-dev.net/api/badge?name=longhorn-turingpi&revision=true&showAppName=true)](https://argocd-internal.spirit-dev.net/applications/longhorn-turingpi)
 
 <!--TOC-->
 
@@ -44,4 +38,4 @@ The installation should be done in two steps:
 ```shell
 #> make dry-run ENV=<ENV>
 #> make install ENV=<ENV>
-```
+``
